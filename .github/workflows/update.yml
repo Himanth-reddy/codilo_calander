@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir -p public
           python codolio_to_calendar.py
-          mv codolio_contests.ics public/
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
