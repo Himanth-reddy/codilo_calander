@@ -18,6 +18,7 @@ def safe_parse_date(date_str):
 os.makedirs("public", exist_ok=True)
 url = "https://node.codolio.com/api/contest-calendar/v1/all/get-upcoming-contests"
 
+print("📡 Fetching data from Codolio API...")
 try:
     response = requests.get(url)
     response.raise_for_status()
@@ -32,28 +33,40 @@ if not isinstance(contest_list, list):
     print("❌ Error: API 'data' key did not contain a list.")
     exit(1)
 
-cal = Calendar()
-cal.add('prodid', '-//Codolio Contests//mxm.dk//')
-cal.add('version', '2.0')
+# A list of platforms we want to create separate calendars for
+platforms_to_process = ['leetcode', 'atcoder', 'codeforces', 'codechef', 'geeksforgeeks']
 
-for contest in contest_list:
-    name = contest.get('contestName')
-    start_time = safe_parse_date(contest.get('contestStartDate'))
-    end_time = safe_parse_date(contest.get('contestEndDate'))
-    url = contest.get('contestUrl', 'No link available')
+# Loop through each platform and generate a dedicated ICS file
+for platform in platforms_to_process:
+    print(f"\n--- Processing calendar for: {platform.upper()} ---")
 
-    if not start_time or not end_time:
-        continue  # Silently skip any contests with bad data
+    # Create a new, empty calendar for this platform
+    cal = Calendar()
+    cal.add('prodid', f'-//Codolio {platform} Contests//mxm.dk//')
+    cal.add('version', '2.0')
+    cal.add('X-WR-CALNAME', f'Contests - {platform.title()}')
 
-    event = Event()
-    event.add('summary', name if name else 'Unnamed Contest')
-    event.add('dtstart', start_time)
-    event.add('dtend', end_time)
-    event.add('description', url)
-    cal.add_component(event)
+    # Filter the main contest list to get contests only for the current platform
+    for contest in contest_list:
+        if contest.get('platform') == platform:
+            name = contest.get('contestName')
+            start_time = safe_parse_date(contest.get('contestStartDate'))
+            end_time = safe_parse_date(contest.get('contestEndDate'))
+            url = contest.get('contestUrl', 'No link available')
 
-ics_path = os.path.join("public", "codolio_contests.ics")
-with open(ics_path, 'wb') as f:
-    f.write(cal.to_ical())
+            if not start_time or not end_time:
+                continue
 
-print(f"✅ ICS file generated with {len(cal.subcomponents)} events.")
+            event = Event()
+            event.add('summary', name if name else 'Unnamed Contest')
+            event.add('dtstart', start_time)
+            event.add('dtend', end_time)
+            event.add('description', url)
+            cal.add_component(event)
+
+    # Save the file with a platform-specific name (e.g., public/leetcode_contests.ics)
+    ics_path = os.path.join("public", f"{platform}_contests.ics")
+    with open(ics_path, 'wb') as f:
+        f.write(cal.to_ical())
+
+    print(f"✅ {platform}_contests.ics file generated with {len(cal.subcomponents)} events.")
