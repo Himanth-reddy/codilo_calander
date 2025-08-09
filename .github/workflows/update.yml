@@ -1,11 +1,10 @@
-# .github/workflows/update.yml
 name: Update Codolio Calendar
 
 on:
   schedule:
     - cron: "0 0 * * *" # Daily at midnight UTC
   workflow_dispatch:   # Allows you to run it manually from the Actions tab
-  push:                # Also runs on pushes to the main branch for easy testing
+  push:
     branches:
       - main
 
@@ -24,33 +23,25 @@ jobs:
       - name: Install dependencies
         run: pip install requests icalendar pytz
 
-      - name: Generate ICS file
-        run: python codolio_to_calendar.py # Your script already creates the 'public' folder
+      - name: Generate ICS files
+        run: python codolio_to_calendar.py
 
-      - name: Create a landing page
-        run: |
-          echo '<html><head><meta http-equiv="refresh" content="0; url=codolio_contests.ics" /></head><body><p>Redirecting to the calendar file... <a href="codolio_contests.ics">Click here if you are not redirected</a>.</p></body></html>' > public/index.html
+      - name: Copy website files to public directory
+        run: cp index.html public/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the entire 'public' directory
           path: './public'
 
   deploy:
-    # This job depends on the 'build' job finishing successfully
     needs: build
-    
-    # Grant permissions for the GITHUB_TOKEN to deploy
     permissions:
       pages: write
       id-token: write
-
-    # Specify the deployment environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
