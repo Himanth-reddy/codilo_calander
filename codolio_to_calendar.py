@@ -29,16 +29,11 @@ data = response.json()
 # Debug: Show JSON structure
 print(json.dumps(data, indent=2))
 
-# Find the first list of contests in the JSON
-contest_list = None
-for key, value in data.items():
-    if isinstance(value, list) and value and isinstance(value[0], dict):
-        contest_list = value
-        print(f"\n✅ Using key '{key}' as contest list.")
-        break
+# Find the list of contests in the JSON (now correctly targeting the 'data' key)
+contest_list = data.get('data')
 
 if contest_list is None:
-    print("\n❌ No contest list found in the API response.")
+    print("\n❌ No contest list found in the API response under the 'data' key.")
     exit(1)
 
 # Create calendar
@@ -49,18 +44,21 @@ cal.add('version', '2.0')
 # Add events
 for contest in contest_list:
     event = Event()
-    event.add('summary', contest.get('name', 'Unnamed Contest'))
-
-    start_time = safe_parse_date(contest.get('start_time'))
-    end_time = safe_parse_date(contest.get('end_time'))
+    
+    # --- UPDATED KEY NAMES ---
+    event.add('summary', contest.get('contestName', 'Unnamed Contest'))
+    start_time = safe_parse_date(contest.get('contestStartDate'))
+    end_time = safe_parse_date(contest.get('contestEndDate'))
+    description_url = contest.get('contestUrl', 'No link available')
+    # -------------------------
 
     if not start_time or not end_time:
-        print(f"⏭ Skipping '{contest.get('name')}' due to invalid date(s).")
+        print(f"⏭ Skipping '{contest.get('contestName')}' due to invalid date(s).")
         continue
 
     event.add('dtstart', start_time)
     event.add('dtend', end_time)
-    event.add('description', contest.get('url', 'No link'))
+    event.add('description', description_url)
     cal.add_component(event)
 
 # Save to public folder
