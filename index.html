@@ -4,254 +4,251 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codolio Contest Calendars</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
     <style>
+        :root {
+            --bg: #f4efe6;
+            --bg-accent: #d9ebe6;
+            --surface: #fffdf8;
+            --surface-strong: #ffffff;
+            --text: #16212e;
+            --muted: #556170;
+            --line: #e5dbc8;
+            --accent: #0b7285;
+            --accent-soft: #d4ebef;
+            --warm: #d97745;
+            --shadow: 0 18px 36px rgba(15, 23, 42, 0.09);
+            --radius: 20px;
+        }
+
         * {
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+            font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
             margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(160deg, var(--bg) 0%, #f8f3ec 100%);
             min-height: 100vh;
-            color: #333;
-            line-height: 1.6;
+            color: var(--text);
+            line-height: 1.5;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .animated-bg {
+        body::before,
+        body::after {
+            content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            border-radius: 999px;
             z-index: -1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            filter: blur(60px);
+            opacity: 0.55;
+            pointer-events: none;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body::before {
+            width: 32vw;
+            height: 32vw;
+            min-width: 220px;
+            min-height: 220px;
+            background: #f3c38b;
+            top: -70px;
+            left: -90px;
+        }
+
+        body::after {
+            width: 36vw;
+            height: 36vw;
+            min-width: 260px;
+            min-height: 260px;
+            background: var(--bg-accent);
+            bottom: -110px;
+            right: -120px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 32px 18px 48px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.8s ease-out;
+            margin: 0 auto 30px;
+            max-width: 760px;
+            animation: slideIn 0.45s ease-out both;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--accent-soft);
+            color: var(--accent);
+            margin-bottom: 12px;
         }
 
         .header h1 {
-            color: white;
-            font-size: 3rem;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
             font-weight: 700;
-            margin: 0 0 10px 0;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            letter-spacing: -1px;
+            margin: 0 0 10px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.2rem;
+            color: var(--muted);
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
             margin: 0;
-            font-weight: 300;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+            animation: slideUp 0.55s ease-out 0.1s both;
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            padding: 30px 20px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--surface-strong);
+            padding: 24px 18px;
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            border-top: 5px solid transparent;
+            box-shadow: var(--shadow);
             position: relative;
-            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s;
-        }
-
-        .stat-card:hover::before {
-            left: 100%;
-        }
+        .stat-card:nth-child(1) { border-top-color: var(--accent); }
+        .stat-card:nth-child(2) { border-top-color: var(--warm); }
+        .stat-card:nth-child(3) { border-top-color: #46836e; }
 
         .stat-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 34px rgba(15, 23, 42, 0.13);
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            font-size: 2.1rem;
             font-weight: 800;
-            color: #667eea;
+            color: var(--text);
             margin: 0;
             display: block;
-            animation: countUp 2s ease-out;
         }
 
         .stat-label {
-            color: #666;
-            font-weight: 500;
-            margin-top: 5px;
-            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 600;
+            margin-top: 7px;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
         }
 
         #calendar {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            background: var(--surface);
+            padding: 20px;
+            border-radius: calc(var(--radius) + 4px);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            animation: slideUp 0.55s ease-out 0.18s both;
             position: relative;
+            min-height: 620px;
+        }
+
+        #calendar .fc-scrollgrid {
+            border: 1px solid #dbe4ef !important;
+            border-radius: 14px;
             overflow: hidden;
         }
 
-        #calendar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
-            background-size: 300% 300%;
-            animation: gradientShift 3s ease infinite;
+        #calendar .fc-col-header-cell {
+            background: #f5f8fc;
+        }
+
+        #calendar .fc-daygrid-day-frame {
+            min-height: 108px;
+            padding: 2px;
+        }
+
+        #calendar .fc-daygrid-day-top {
+            justify-content: flex-end;
+            padding: 4px 6px 0 0;
         }
 
         .fc-event {
             cursor: pointer;
             border: none !important;
-            border-radius: 8px !important;
-            padding: 2px 6px !important;
+            border-radius: 9px !important;
+            padding: 3px 7px !important;
             font-weight: 600 !important;
-            font-size: 0.85rem !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            font-size: 0.83rem !important;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         .fc-event:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
-        }
-
-        .fc-event::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .fc-event:hover::before {
-            left: 100%;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.22) !important;
         }
 
         .subscription-section {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            margin-top: 40px;
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
+            background: var(--surface-strong);
+            margin-top: 24px;
+            padding: 28px 22px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            animation: slideUp 0.55s ease-out 0.3s both;
         }
 
         .subscription-section h2 {
-            text-align: center;
-            color: #2C3E50;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            position: relative;
+            margin: 0 0 8px;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            font-size: clamp(1.3rem, 3vw, 1.9rem);
+            letter-spacing: -0.02em;
         }
 
-        .subscription-section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
+        .subscription-intro {
+            margin: 0 0 20px;
+            color: var(--muted);
         }
 
         .subscription-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 12px;
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
         .platform-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-            position: relative;
+            border-radius: 14px;
             overflow: hidden;
-        }
-
-        .platform-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--platform-color);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .platform-card:hover::before {
-            transform: scaleX(1);
+            border: 1px solid #e3e7ec;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
 
         .platform-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(15, 23, 42, 0.12);
+        }
+
+        .platform-card.active {
             border-color: var(--platform-color);
+            box-shadow: inset 0 0 0 1px var(--platform-color);
         }
 
         .platform-card.leetcode { --platform-color: #FFA116; }
@@ -260,43 +257,120 @@
         .platform-card.codechef { --platform-color: #A97300; }
         .platform-card.geeksforgeeks { --platform-color: #0F9D58; }
 
-        .platform-card a {
-            text-decoration: none;
-            color: #2C3E50;
-            font-weight: 700;
+        .subscribe-btn {
+            width: 100%;
+            border: none;
+            background: #fdfefe;
+            color: var(--text);
+            text-align: left;
+            padding: 16px;
+            cursor: pointer;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            font-family: inherit;
         }
 
-        .subscription-note {
-            margin-top: 24px;
-            text-align: center;
-            color: #5f6368;
-            font-size: 0.95rem;
+        .subscribe-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
         }
 
         .platform-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
             background: var(--platform-color);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 0.86rem;
+            flex-shrink: 0;
+        }
+
+        .platform-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .platform-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .platform-action {
+            color: var(--muted);
+            font-size: 0.87rem;
+            font-weight: 500;
+        }
+
+        .feed-link-panel {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: #faf7f1;
+        }
+
+        .feed-label {
+            margin: 0 0 8px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        .feed-link-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .feed-url {
+            width: 100%;
+            border: 1px solid #ced6e0;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            padding: 10px 12px;
+            color: #1f2937;
+            font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        }
+
+        .copy-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .copy-feedback {
+            margin: 8px 0 0;
+            min-height: 1.2em;
+            color: #1f6e43;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .subscription-note {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
         }
 
         .loading-spinner {
             display: inline-block;
             width: 40px;
             height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 4px solid #e4e8ef;
+            border-top: 4px solid var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 50px auto;
@@ -307,10 +381,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes fadeInDown {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-12px);
             }
             to {
                 opacity: 1;
@@ -318,77 +392,131 @@
             }
         }
 
-        @keyframes fadeInUp {
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @keyframes countUp {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
             }
         }
 
         .fc-header-toolbar {
-            margin-bottom: 30px !important;
+            margin-bottom: 16px !important;
+            row-gap: 10px;
+            column-gap: 12px;
+        }
+
+        .fc .fc-toolbar-chunk {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fc .fc-button-group {
+            display: inline-flex;
+            gap: 8px;
+        }
+
+        .fc .fc-button-group > .fc-button {
+            margin: 0 !important;
+            border-radius: 10px !important;
         }
 
         .fc-button {
-            background: linear-gradient(135deg, #667eea, #764ba2) !important;
-            border: none !important;
+            background: #f4f7fb !important;
+            border: 1px solid #d6deea !important;
+            color: #1f2937 !important;
             border-radius: 10px !important;
-            padding: 8px 16px !important;
+            padding: 8px 12px !important;
             font-weight: 600 !important;
-            transition: all 0.3s ease !important;
+            text-transform: capitalize !important;
+            transition: all 0.2s ease !important;
         }
 
         .fc-button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3) !important;
+            border-color: #adc1dd !important;
+            background: #ffffff !important;
         }
 
         .fc-button:disabled {
-            opacity: 0.6 !important;
+            opacity: 0.55 !important;
         }
 
-        .fc-today-button {
-            background: linear-gradient(135deg, #f093fb, #f5576c) !important;
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: #fff !important;
+        }
+
+        .fc .fc-today-button {
+            background: #e7f2f6 !important;
+            border-color: #c7dbe5 !important;
+            color: #0f4f63 !important;
+        }
+
+        .fc .fc-daygrid-day.fc-day-today {
+            background: #f1f7f8 !important;
+        }
+
+        .fc-theme-standard td,
+        .fc-theme-standard th {
+            border-color: #e8edf4 !important;
+        }
+
+        .fc-col-header-cell-cushion,
+        .fc-daygrid-day-number {
+            color: #253244;
+            text-decoration: none !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .fc .fc-toolbar-title {
+            font-family: "Sora", "Segoe UI", sans-serif;
+            font-size: 1.25rem !important;
+            letter-spacing: -0.01em;
+        }
+
+        @media (max-width: 900px) {
+            #calendar {
+                min-height: 560px;
+            }
+
+            .fc-toolbar.fc-header-toolbar {
+                flex-wrap: wrap;
+            }
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 20px 15px;
+                padding: 22px 12px 34px;
             }
-            
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             #calendar {
-                padding: 20px 15px;
+                padding: 12px 10px;
             }
-            
+
             .subscription-section {
-                padding: 30px 20px;
+                padding: 20px 14px;
             }
-            
+
             .subscription-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .feed-link-row {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
 
@@ -396,20 +524,22 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .header h1 {
-                font-size: 1.8rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>
 </head>
 <body>
-    <div class="animated-bg"></div>
-    
     <div class="container">
         <div class="header">
+            <span class="eyebrow">Codolio Contests</span>
             <h1>Contest Calendar</h1>
-            <p>Stay updated with upcoming programming contests</p>
+            <p>Track upcoming coding contests and subscribe to platform feeds using direct calendar URLs.</p>
         </div>
 
         <div class="stats-grid" id="statsGrid">
@@ -432,51 +562,81 @@
         </div>
 
         <div class="subscription-section">
-            <h2>Subscribe to Calendars</h2>
+            <h2>Subscribe by Link</h2>
+            <p class="subscription-intro">Choose a platform to generate its hosted feed URL. Use that URL in Google Calendar "From URL" instead of downloading an `.ics` file.</p>
             <ul class="subscription-grid">
                 <li class="platform-card leetcode">
-                    <a href="./leetcode_contests.ics" data-ics-file="leetcode_contests.ics">
+                    <button type="button" class="subscribe-btn" data-feed-file="leetcode_contests.ics" data-platform-name="LeetCode">
                         <span class="platform-icon">LC</span>
-                        LeetCode Calendar
-                    </a>
+                        <span class="platform-meta">
+                            <span class="platform-name">LeetCode</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
                 </li>
                 <li class="platform-card atcoder">
-                    <a href="./atcoder_contests.ics" data-ics-file="atcoder_contests.ics">
+                    <button type="button" class="subscribe-btn" data-feed-file="atcoder_contests.ics" data-platform-name="AtCoder">
                         <span class="platform-icon">AC</span>
-                        AtCoder Calendar
-                    </a>
+                        <span class="platform-meta">
+                            <span class="platform-name">AtCoder</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
                 </li>
                 <li class="platform-card codeforces">
-                    <a href="./codeforces_contests.ics" data-ics-file="codeforces_contests.ics">
+                    <button type="button" class="subscribe-btn" data-feed-file="codeforces_contests.ics" data-platform-name="Codeforces">
                         <span class="platform-icon">CF</span>
-                        Codeforces Calendar
-                    </a>
+                        <span class="platform-meta">
+                            <span class="platform-name">Codeforces</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
                 </li>
                 <li class="platform-card codechef">
-                    <a href="./codechef_contests.ics" data-ics-file="codechef_contests.ics">
+                    <button type="button" class="subscribe-btn" data-feed-file="codechef_contests.ics" data-platform-name="CodeChef">
                         <span class="platform-icon">CC</span>
-                        CodeChef Calendar
-                    </a>
+                        <span class="platform-meta">
+                            <span class="platform-name">CodeChef</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
                 </li>
                 <li class="platform-card geeksforgeeks">
-                    <a href="./geeksforgeeks_contests.ics" data-ics-file="geeksforgeeks_contests.ics">
+                    <button type="button" class="subscribe-btn" data-feed-file="geeksforgeeks_contests.ics" data-platform-name="GeeksForGeeks">
                         <span class="platform-icon">GG</span>
-                        GeeksForGeeks Calendar
-                    </a>
+                        <span class="platform-meta">
+                            <span class="platform-name">GeeksForGeeks</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
                 </li>
             </ul>
-            <p class="subscription-note">Tip: subscribe once in Google Calendar using the hosted ICS URL. New contests are added automatically after regular feed refresh.</p>
+            <div class="feed-link-panel" id="feedLinkPanel" hidden>
+                <p class="feed-label" id="feedLabel">Subscription URL</p>
+                <div class="feed-link-row">
+                    <input id="feedUrlInput" class="feed-url" type="text" readonly aria-label="Calendar subscription URL">
+                    <button id="copyFeedBtn" class="copy-btn" type="button">Copy Link</button>
+                </div>
+                <p class="copy-feedback" id="copyFeedback"></p>
+                <p class="subscription-note">Google Calendar: Other calendars -> + -> From URL -> paste this link -> Add calendar.</p>
+            </div>
         </div>
     </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let calendar; // Declare calendar here to make it accessible in the keydown listener
+        let calendar;
 
         const calendarEl = document.getElementById('calendar');
+        const feedLinkPanel = document.getElementById('feedLinkPanel');
+        const feedUrlInput = document.getElementById('feedUrlInput');
+        const feedLabel = document.getElementById('feedLabel');
+        const copyFeedBtn = document.getElementById('copyFeedBtn');
+        const copyFeedback = document.getElementById('copyFeedback');
+        const platformCards = document.querySelectorAll('.platform-card');
         const platformColors = {
             'leetcode': '#FFA116',
-            'atcoder': '#2C3E50', 
+            'atcoder': '#2C3E50',
             'codeforces': '#1F8ACB',
             'codechef': '#A97300',
             'geeksforgeeks': '#0F9D58',
@@ -485,40 +645,77 @@
 
         const apiUrl = 'https://node.codolio.com/api/contest-calendar/v1/all/get-upcoming-contests';
 
-        // Convert .ics links to absolute URLs so users can paste them directly in Google Calendar.
-        document.querySelectorAll('a[data-ics-file]').forEach((link) => {
-            const fileName = link.getAttribute('data-ics-file');
-            link.href = new URL(fileName, window.location.href).toString();
+        function getFeedUrl(fileName) {
+            return new URL(fileName, window.location.href).toString();
+        }
+
+        function setActivePlatform(button) {
+            platformCards.forEach((card) => card.classList.remove('active'));
+            const parentCard = button.closest('.platform-card');
+            if (parentCard) {
+                parentCard.classList.add('active');
+            }
+        }
+
+        document.querySelectorAll('button[data-feed-file]').forEach((button) => {
+            button.addEventListener('click', function() {
+                const fileName = this.getAttribute('data-feed-file');
+                const platformName = this.getAttribute('data-platform-name') || 'Selected';
+                const feedUrl = getFeedUrl(fileName);
+
+                feedLabel.textContent = platformName + ' subscription URL';
+                feedUrlInput.value = feedUrl;
+                copyFeedback.textContent = '';
+                copyFeedBtn.textContent = 'Copy Link';
+                feedLinkPanel.hidden = false;
+                setActivePlatform(this);
+                feedUrlInput.focus();
+                feedUrlInput.select();
+            });
         });
 
-        // Animate numbers with intersection observer
+        copyFeedBtn.addEventListener('click', async function() {
+            if (!feedUrlInput.value) {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(feedUrlInput.value);
+                copyFeedback.textContent = 'Link copied. Paste it in your calendar app.';
+                copyFeedBtn.textContent = 'Copied';
+            } catch (error) {
+                feedUrlInput.focus();
+                feedUrlInput.select();
+                copyFeedback.textContent = 'Copy failed. Select the URL and copy it manually.';
+            }
+        });
+
         function animateNumber(element, target, duration = 2000) {
             const start = 0;
             const startTime = performance.now();
-            
+
             function update(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const easeOutCubic = 1 - Math.pow(1 - progress, 3);
                 const current = Math.round(start + (target - start) * easeOutCubic);
-                
+
                 element.textContent = current;
-                
+
                 if (progress < 1) {
                     requestAnimationFrame(update);
                 }
             }
-            
+
             requestAnimationFrame(update);
         }
 
-        // Intersection Observer for stats animation
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const numberElements = entry.target.querySelectorAll('.stat-number');
                     numberElements.forEach(el => {
-                        const target = parseInt(el.textContent);
+                        const target = parseInt(el.textContent, 10);
                         if (target > 0) {
                             animateNumber(el, target);
                         }
@@ -534,18 +731,15 @@
                 const contests = data.data;
                 const now = new Date();
                 const oneWeekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-                
-                // Calculate stats
+
                 const thisWeekContests = contests.filter(contest => {
                     const startDate = new Date(contest.contestStartDate);
                     return startDate >= now && startDate <= oneWeekFromNow;
                 }).length;
 
-                // Update stats
                 document.getElementById('totalContests').textContent = contests.length;
                 document.getElementById('thisWeek').textContent = thisWeekContests;
-                
-                // Start stats animation
+
                 statsObserver.observe(document.getElementById('statsGrid'));
 
                 const events = contests.map(contest => ({
@@ -562,13 +756,13 @@
                     }
                 }));
 
+                const compactLayout = window.matchMedia('(max-width: 860px)').matches;
+
                 calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,listWeek'
-                    },
+                    headerToolbar: compactLayout
+                        ? { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' }
+                        : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listWeek' },
                     events: events,
                     eventClick: function(info) {
                         info.jsEvent.preventDefault();
@@ -576,24 +770,17 @@
                             window.open(info.event.url, '_blank');
                         }
                     },
-                    eventMouseEnter: function(info) {
-                        info.el.style.transform = 'scale(1.05)';
-                        info.el.style.zIndex = '10';
-                    },
-                    eventMouseLeave: function(info) {
-                        info.el.style.transform = 'scale(1)';
-                        info.el.style.zIndex = '1';
-                    },
+                    slotEventOverlap: false,
+                    eventOverlap: false,
                     dayMaxEvents: 3,
                     moreLinkClick: 'popover',
                     height: 'auto',
-                    aspectRatio: 1.8
+                    aspectRatio: compactLayout ? 1.0 : 1.7
                 });
 
                 calendar.render();
-                window.calendar = calendar; // Make calendar globally accessible for keydown listener
-                
-                // Remove loading spinner
+                window.calendar = calendar;
+
                 const spinner = calendarEl.querySelector('.loading-spinner');
                 if (spinner) {
                     spinner.remove();
@@ -607,21 +794,6 @@
                 }
             });
 
-        // Add smooth scroll for better UX
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Add keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 if (window.calendar) {
