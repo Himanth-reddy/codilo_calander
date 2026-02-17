@@ -4,6 +4,7 @@ from icalendar import Calendar, Event
 from datetime import datetime
 import pytz
 import json
+from uuid import uuid4
 
 def safe_parse_date(date_str):
     """Safely parse ISO 8601 date strings into datetime objects."""
@@ -44,6 +45,7 @@ for platform in platforms_to_process:
     cal = Calendar()
     cal.add('prodid', f'-//Codolio {platform} Contests//mxm.dk//')
     cal.add('version', '2.0')
+    cal.add('calscale', 'GREGORIAN')
     cal.add('X-WR-CALNAME', f'Contests - {platform.title()}')
 
     # Filter the main contest list to get contests only for the current platform
@@ -58,10 +60,13 @@ for platform in platforms_to_process:
                 continue
 
             event = Event()
+            event.add('uid', f"{uuid4()}@codolio.com")
+            event.add('dtstamp', datetime.now(pytz.UTC))
             event.add('summary', name if name else 'Unnamed Contest')
             event.add('dtstart', start_time)
             event.add('dtend', end_time)
             event.add('description', url)
+            event.add('url', url)
             cal.add_component(event)
 
     # Save the file with a platform-specific name (e.g., public/leetcode_contests.ics)

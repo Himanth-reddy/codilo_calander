@@ -271,6 +271,13 @@
             gap: 10px;
         }
 
+        .subscription-note {
+            margin-top: 24px;
+            text-align: center;
+            color: #5f6368;
+            font-size: 0.95rem;
+        }
+
         .platform-icon {
             width: 24px;
             height: 24px;
@@ -428,36 +435,37 @@
             <h2>Subscribe to Calendars</h2>
             <ul class="subscription-grid">
                 <li class="platform-card leetcode">
-                    <a href="./leetcode_contests.ics">
+                    <a href="./leetcode_contests.ics" data-ics-file="leetcode_contests.ics">
                         <span class="platform-icon">LC</span>
                         LeetCode Calendar
                     </a>
                 </li>
                 <li class="platform-card atcoder">
-                    <a href="./atcoder_contests.ics">
+                    <a href="./atcoder_contests.ics" data-ics-file="atcoder_contests.ics">
                         <span class="platform-icon">AC</span>
                         AtCoder Calendar
                     </a>
                 </li>
                 <li class="platform-card codeforces">
-                    <a href="./codeforces_contests.ics">
+                    <a href="./codeforces_contests.ics" data-ics-file="codeforces_contests.ics">
                         <span class="platform-icon">CF</span>
                         Codeforces Calendar
                     </a>
                 </li>
                 <li class="platform-card codechef">
-                    <a href="./codechef_contests.ics">
+                    <a href="./codechef_contests.ics" data-ics-file="codechef_contests.ics">
                         <span class="platform-icon">CC</span>
                         CodeChef Calendar
                     </a>
                 </li>
                 <li class="platform-card geeksforgeeks">
-                    <a href="./geeksforgeeks_contests.ics">
+                    <a href="./geeksforgeeks_contests.ics" data-ics-file="geeksforgeeks_contests.ics">
                         <span class="platform-icon">GG</span>
                         GeeksForGeeks Calendar
                     </a>
                 </li>
             </ul>
+            <p class="subscription-note">Tip: Google Calendar subscription requires a full public URL. These links automatically resolve to absolute URLs when hosted.</p>
         </div>
     </div>
 
@@ -476,6 +484,12 @@
         };
         
         const apiUrl = 'https://node.codolio.com/api/contest-calendar/v1/all/get-upcoming-contests';
+
+        // Convert .ics links to absolute URLs so users can paste them directly in Google Calendar.
+        document.querySelectorAll('a[data-ics-file]').forEach((link) => {
+            const fileName = link.getAttribute('data-ics-file');
+            link.href = new URL(fileName, window.location.href).toString();
+        });
 
         // Animate numbers with intersection observer
         function animateNumber(element, target, duration = 2000) {
