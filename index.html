@@ -271,6 +271,13 @@
             gap: 10px;
         }
 
+        .subscription-note {
+            margin-top: 24px;
+            text-align: center;
+            color: #5f6368;
+            font-size: 0.95rem;
+        }
+
         .platform-icon {
             width: 24px;
             height: 24px;
@@ -428,36 +435,37 @@
             <h2>Subscribe to Calendars</h2>
             <ul class="subscription-grid">
                 <li class="platform-card leetcode">
-                    <a href="./leetcode_contests.ics">
+                    <a href="#" data-ics-file="leetcode_contests.ics" target="_blank" rel="noopener noreferrer">
                         <span class="platform-icon">LC</span>
-                        LeetCode Calendar
+                        Add LeetCode to Google Calendar
                     </a>
                 </li>
                 <li class="platform-card atcoder">
-                    <a href="./atcoder_contests.ics">
+                    <a href="#" data-ics-file="atcoder_contests.ics" target="_blank" rel="noopener noreferrer">
                         <span class="platform-icon">AC</span>
-                        AtCoder Calendar
+                        Add AtCoder to Google Calendar
                     </a>
                 </li>
                 <li class="platform-card codeforces">
-                    <a href="./codeforces_contests.ics">
+                    <a href="#" data-ics-file="codeforces_contests.ics" target="_blank" rel="noopener noreferrer">
                         <span class="platform-icon">CF</span>
-                        Codeforces Calendar
+                        Add Codeforces to Google Calendar
                     </a>
                 </li>
                 <li class="platform-card codechef">
-                    <a href="./codechef_contests.ics">
+                    <a href="#" data-ics-file="codechef_contests.ics" target="_blank" rel="noopener noreferrer">
                         <span class="platform-icon">CC</span>
-                        CodeChef Calendar
+                        Add CodeChef to Google Calendar
                     </a>
                 </li>
                 <li class="platform-card geeksforgeeks">
-                    <a href="./geeksforgeeks_contests.ics">
+                    <a href="#" data-ics-file="geeksforgeeks_contests.ics" target="_blank" rel="noopener noreferrer">
                         <span class="platform-icon">GG</span>
-                        GeeksForGeeks Calendar
+                        Add GeeksForGeeks to Google Calendar
                     </a>
                 </li>
             </ul>
+            <p class="subscription-note">Click any button to open Google Calendar and subscribe in one step.</p>
         </div>
     </div>
 
@@ -476,6 +484,15 @@
         };
         
         const apiUrl = 'https://node.codolio.com/api/contest-calendar/v1/all/get-upcoming-contests';
+
+        // Open Google Calendar subscribe flow directly for each platform feed.
+        const hostedBaseUrl = 'https://himanth-reddy.github.io/codilo_calander/';
+        document.querySelectorAll('a[data-ics-file]').forEach((link) => {
+            const fileName = link.getAttribute('data-ics-file');
+            const icsUrl = new URL(fileName, hostedBaseUrl).toString();
+            const googleSubscribeUrl = `https://calendar.google.com/calendar/u/0/r?cid=${encodeURIComponent(icsUrl)}`;
+            link.href = googleSubscribeUrl;
+        });
 
         // Animate numbers with intersection observer
         function animateNumber(element, target, duration = 2000) {
