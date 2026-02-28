@@ -1,0 +1,44 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Codolio codeforces Contests//mxm.dk//
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Contests - Codeforces
+BEGIN:VEVENT
+SUMMARY:Kotlin Heroes: Episode 14
+DTSTART:20260302T143500Z
+DTEND:20260302T170500Z
+DTSTAMP:20260228T014923Z
+UID:e307b6ae40f390e1b1b6f39011a3cdaad4bfb2d2@codolio.com
+DESCRIPTION:https://codeforces.com/contest/2199
+URL:https://codeforces.com/contest/2199
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:2026 ICPC Asia Pacific Championship - Online Mirror (Unrated\, Onl
+ ine Mirror\, ICPC Rules\, Teams Preferred)
+DTSTART:20260308T014500Z
+DTEND:20260308T064500Z
+DTSTAMP:20260228T014923Z
+UID:ce065fc117e95fb019cd849542c44d1d1e628367@codolio.com
+DESCRIPTION:https://codeforces.com/contest/2206
+URL:https://codeforces.com/contest/2206
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Codeforces Round (Div. 1 + Div. 2)
+DTSTART:20260308T143500Z
+DTEND:20260308T173500Z
+DTSTAMP:20260228T014923Z
+UID:d47f172b39d23b3fb7a62a37a3226ce355824742@codolio.com
+DESCRIPTION:https://codeforces.com/contest/2207
+URL:https://codeforces.com/contest/2207
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Educational Codeforces Round 188 (Rated for Div. 2)
+DTSTART:20260316T143500Z
+DTEND:20260316T163500Z
+DTSTAMP:20260228T014923Z
+UID:8b2f062cc040c31a711b10fdd26461b650853dc0@codolio.com
+DESCRIPTION:https://codeforces.com/contest/2204
+URL:https://codeforces.com/contest/2204
+END:VEVENT
+END:VCALENDAR

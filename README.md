@@ -36,6 +36,7 @@ python3 codolio_to_calendar.py
 
 This creates:
 
+- `public/all_contests.ics`
 - `public/leetcode_contests.ics`
 - `public/atcoder_contests.ics`
 - `public/codeforces_contests.ics`

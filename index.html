@@ -251,6 +251,7 @@
             box-shadow: inset 0 0 0 1px var(--platform-color);
         }
 
+        .platform-card.all { --platform-color: #D97745; }
         .platform-card.leetcode { --platform-color: #FFA116; }
         .platform-card.atcoder { --platform-color: #2C3E50; }
         .platform-card.codeforces { --platform-color: #1F8ACB; }
@@ -565,6 +566,15 @@
             <h2>Subscribe by Link</h2>
             <p class="subscription-intro">Choose a platform to generate its hosted feed URL. Use that URL in Google Calendar "From URL" instead of downloading an `.ics` file.</p>
             <ul class="subscription-grid">
+                <li class="platform-card all">
+                    <button type="button" class="subscribe-btn" data-feed-file="all_contests.ics" data-platform-name="All Platforms">
+                        <span class="platform-icon">ALL</span>
+                        <span class="platform-meta">
+                            <span class="platform-name">All Platforms</span>
+                            <span class="platform-action">Get subscription link</span>
+                        </span>
+                    </button>
+                </li>
                 <li class="platform-card leetcode">
                     <button type="button" class="subscribe-btn" data-feed-file="leetcode_contests.ics" data-platform-name="LeetCode">
                         <span class="platform-icon">LC</span>

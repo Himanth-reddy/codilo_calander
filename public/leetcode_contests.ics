@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Codolio leetcode Contests//mxm.dk//
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Contests - Leetcode
+BEGIN:VEVENT
+SUMMARY:Biweekly Contest 177
+DTSTART:20260228T143000Z
+DTEND:20260228T160000Z
+DTSTAMP:20260228T014923Z
+UID:a1d6f6cb50c24afa80792ab31f7d1b6588a7985f@codolio.com
+DESCRIPTION:https://leetcode.com/contest/biweekly-contest-177/
+URL:https://leetcode.com/contest/biweekly-contest-177/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Weekly Contest 491
+DTSTART:20260301T023000Z
+DTEND:20260301T040000Z
+DTSTAMP:20260228T014923Z
+UID:1fd1f0c62e82b86a1bf26b3c2d33f8583e9088bf@codolio.com
+DESCRIPTION:https://leetcode.com/contest/weekly-contest-491/
+URL:https://leetcode.com/contest/weekly-contest-491/
+END:VEVENT
+END:VCALENDAR
