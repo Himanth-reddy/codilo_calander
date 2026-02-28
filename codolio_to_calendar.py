@@ -50,6 +50,13 @@ if not isinstance(contest_list, list):
 # A list of platforms we want to create separate calendars for
 platforms_to_process = ['leetcode', 'atcoder', 'codeforces', 'codechef', 'geeksforgeeks']
 
+all_cal = Calendar()
+all_cal.add('prodid', '-//Codolio All Contests//mxm.dk//')
+all_cal.add('version', '2.0')
+all_cal.add('calscale', 'GREGORIAN')
+all_cal.add('method', 'PUBLISH')
+all_cal.add('X-WR-CALNAME', 'Contests - All Platforms')
+
 # Loop through each platform and generate a dedicated ICS file
 for platform in platforms_to_process:
     print(f"\n--- Processing calendar for: {platform.upper()} ---")
@@ -89,6 +96,7 @@ for platform in platforms_to_process:
         event.add('description', url)
         event.add('url', url)
         cal.add_component(event)
+        all_cal.add_component(event)
 
     # Save the file with a platform-specific name (e.g., public/leetcode_contests.ics)
     ics_path = os.path.join("public", f"{platform}_contests.ics")
@@ -96,3 +104,9 @@ for platform in platforms_to_process:
         f.write(cal.to_ical())
 
     print(f"✅ {platform}_contests.ics file generated with {len(cal.subcomponents)} events.")
+
+# Save the all platforms calendar
+all_ics_path = os.path.join("public", "all_contests.ics")
+with open(all_ics_path, 'wb') as f:
+    f.write(all_cal.to_ical())
+print(f"✅ all_contests.ics file generated with {len(all_cal.subcomponents)} events.")
